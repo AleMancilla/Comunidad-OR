@@ -13,7 +13,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Comunidad OR"),
+        toolbarHeight: 45,
+        title: Column(
+          children: [
+            Center(child: Text("Comunidad OR")),
+          ],
+        ),
       ),
       body: Column(
         children: [
