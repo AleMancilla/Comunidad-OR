@@ -77,7 +77,7 @@ class _HomePageState extends State<HomePage> {
   Widget _bottomNavigatorBar() {
     return Container(
       height: 50,
-      color: Colors.orange,
+      color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

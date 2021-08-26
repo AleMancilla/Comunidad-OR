@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pageview/UI/Pages/HomePage.dart';
-import 'package:pageview/UI/Pages/SplashScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'Comunidad OR',
       home: HomePage(),
       theme: ThemeData(primaryColor: Colors.blueGrey[900]),
     );

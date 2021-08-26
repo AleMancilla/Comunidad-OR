@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pageview">
+    package="com.example.pageviewComunidadOR">
    <application
-        android:label="pageview"
+        android:label="Comunidad OR"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
