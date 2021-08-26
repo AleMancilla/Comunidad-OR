@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,7 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _indexPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+
+  int _indexPage = 3;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +35,13 @@ class _HomePageState extends State<HomePage> {
             child: IndexedStack(
               index: _indexPage,
               children: [
-                Container(color: Colors.red),
-                Container(color: Colors.blue),
-                Container(color: Colors.orange),
-                Container(color: Colors.green),
-                Container(color: Colors.grey),
-                Container(color: Colors.indigo),
-                Container(color: Colors.pink),
+                _webView('https://tacsi.orstores.com/'),
+                _webView('https://itemshop.orstores.com/'),
+                _webView('http://orstores.com/tv'),
+                _webView('https://bancorhg.com/'),
+                _webView('http://habitad.orstores.com/'),
+                _webView('http://chator.orstores.com/'),
+                _webView('http://mapas.orstores.com/login'),
               ],
             ),
           ),
@@ -74,5 +83,26 @@ class _HomePageState extends State<HomePage> {
         height: 40,
       ),
     );
+  }
+
+  Widget _webView(String uri) {
+    return WebView(
+      initialUrl: uri,
+      javascriptMode: JavascriptMode.unrestricted,
+      javascriptChannels: <JavascriptChannel>{
+        _toasterJavascriptChannel(context),
+      },
+    );
+  }
+
+  JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
+    return JavascriptChannel(
+        name: 'Toaster',
+        onMessageReceived: (JavascriptMessage message) {
+          // ignore: deprecated_member_use
+          Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text(message.message)),
+          );
+        });
   }
 }
