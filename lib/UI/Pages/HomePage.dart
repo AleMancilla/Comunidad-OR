@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:pageview/UI/Pages/SplashScreen.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,15 +13,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  double _positionPage = 0;
+
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, () {
+      Timer(Duration(seconds: 4), () {
+        _positionPage = MediaQuery.of(context).size.height;
+        setState(() {});
+      });
+    });
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   int _indexPage = 3;
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        _bodyHome(),
+        AnimatedPositioned(
+          child: SplashScreen(),
+          duration: Duration(milliseconds: 400),
+          bottom: _positionPage,
+        ),
+      ],
+    );
+  }
+
+  Scaffold _bodyHome() {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 45,
