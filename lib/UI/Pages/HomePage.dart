@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pageview/UI/Pages/SplashScreen.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
         setState(() {});
       });
     });
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   int _indexPage = 1;
@@ -109,23 +108,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _webView(String uri) {
-    return WebView(
-      initialUrl: uri,
-      javascriptMode: JavascriptMode.unrestricted,
-      javascriptChannels: <JavascriptChannel>{
-        _toasterJavascriptChannel(context),
+    return InAppWebView(
+      initialUrlRequest: URLRequest(url: Uri.parse(uri)),
+      initialOptions: InAppWebViewGroupOptions(
+          crossPlatform: InAppWebViewOptions(
+            javaScriptEnabled: true,
+            useShouldOverrideUrlLoading: true,
+            mediaPlaybackRequiresUserGesture: false,
+          ),
+          android: AndroidInAppWebViewOptions(
+            useHybridComposition: true,
+          ),
+          ios: IOSInAppWebViewOptions(
+            allowsInlineMediaPlayback: true,
+          )),
+      androidOnPermissionRequest: (controller, origin, resources) async {
+        return PermissionRequestResponse(
+            resources: resources,
+            action: PermissionRequestResponseAction.GRANT);
+      },
+      onConsoleMessage: (t, c) {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(content: Text(c.message)),
+        );
       },
     );
-  }
-
-  JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
-    return JavascriptChannel(
-        name: 'Toaster',
-        onMessageReceived: (JavascriptMessage message) {
-          // ignore: deprecated_member_use
-          Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        });
   }
 }
